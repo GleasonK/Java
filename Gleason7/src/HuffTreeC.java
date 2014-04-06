@@ -60,6 +60,28 @@ public class HuffTreeC implements HuffTree, Comparable{
         out.close();
     }
 
+    ///////////////////////////////////////
+    //Complete with private static function
+    ///////////////////////////////////////
+
+//    public void writeOut(BinaryIn in, FileIO io) throws IOException{
+//        FileWriter out = io.openOutputFile();
+//        System.out.println("TREE CHAR: " + this);
+//        for (int i = 0; i < this.getWeight(); i++) {
+//            char letter = HuffTreeC.checkLeaf(in, this);
+//            System.out.println("Writing: " + letter);
+//            out.write(letter);
+//        }
+//        out.close();
+//    }
+//
+//    private static char checkLeaf(BinaryIn in, HuffTree tree){
+//        char tempCh = tree.getCh();
+//        if (tempCh != 0) return tempCh;
+//        else if (in.readInt(1) == 0) return checkLeaf(in, tree.getLeft());
+//        return checkLeaf(in, tree.getRight());
+//    }
+
 
     public int compareTo(Object otherTree) {
         HuffTree other = (HuffTree) otherTree;
