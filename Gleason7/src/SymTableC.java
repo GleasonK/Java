@@ -37,14 +37,14 @@ public class SymTableC<Key, Value> implements SymTable<Key, Value> {
     //For the frequencies
     public void toStringFreq(){
         Set<Key> STKeys = this.getKeys();
-        System.out.println("Wrote Symbol Table Codes:");
-        System.out.println("Char:Frequency:Code ");
+        System.out.println("Wrote Symbol Table Codes as ");
+        System.out.print("Char:Frequency ");
         for (Key i : STKeys) {
             //Need to print everything
             TableValue tv = (TableValue) this.get(i);
             Integer ii = (Integer) i;
             System.out.println((char)((int) ii) + ":" + (int) tv.getFrequency());
         }
-        System.out.println();
+        //System.out.println(); //optional space
     }
 }

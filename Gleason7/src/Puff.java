@@ -35,22 +35,16 @@ public class Puff {
         System.out.println("Table Size: " + tableSize);
         makePuffTable(tableSize);
         HuffTree tree = makeHTree();
-        System.out.println(tree.toString());
+        //System.out.println(tree.toString());   //DEBUG
         tree.writeText(this.io, this.input);
 
 
     }
 
-//    private BinaryIn openBinFile(){
-//        return io.openBinaryInputFile(this.input);
-//        //BinaryIn inputFile = io.openBinaryInputFile(this.input);
-//        //return inputFile;
-//    }
-
     private boolean checkMagic(BinaryIn inputFile) throws DataFormatException {
         int mNum = inputFile.readShort(); // 8bit = 1byte
         int a = 0x0BC0;
-        System.out.println("a: " + a + " mNum: "+ mNum);
+        //System.out.println("a: " + a + " mNum: "+ mNum);  //DEBUG
         if (mNum == this.MagicNum) return true;
         else throw new DataFormatException("Magic Number did not match! Data Corrupt.");
     }
@@ -84,32 +78,6 @@ public class Puff {
         return tempQueue.poll();
 
     }
-
-//    private void makeText(HuffTree tree) throws IOException{
-//        FileWriter out = io.openOutputFile();
-//        System.out.println("TREE CHAR: " + tree);
-//        for (int i = 0; i < 3; i++){//tree.getWeight(); i++){
-//            //int temp;
-//            HuffTree tempTree = tree;
-////            while(!tempTree.isLeaf()){
-////                System.out.print("Cycling Tree " + tempTree.getCh());
-////                System.out.print("Tree " + tempTree);
-////                //Read next bit, if bit == 0 => getLeft()
-////                int bit = this.input.readInt(1);
-////                System.out.println("ReadInt: " + bit);
-////                //if (bit == 0) System.out.print("TRUE");
-////                tempTree.getLeft();
-//////                if(this.input.readInt(1) == 0) tempTree.getLeft();
-//////                else tempTree.getRight();
-////            }
-//            char letter = tempTree.getCh();
-//            out.write(letter);
-//            System.out.println("Wrote: " + letter);
-//        }
-//        out.close();
-//}
-
-
 
 
     public static void main(String[] args) throws IOException, DataFormatException{

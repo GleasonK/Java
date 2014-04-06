@@ -51,13 +51,15 @@ public class HuffTreeC implements HuffTree, Comparable{
 
     public void writeText(FileIO io, BinaryIn in) throws IOException{
         FileWriter out = io.openOutputFile();
-        System.out.println("TREE CHAR: " + this);
+        //System.out.println("TREE: " + this); //DEBUG
+        System.out.println("Writing...");    //DEBUG
         for (int i = 0; i < this.getWeight(); i++) {
             char letter = this.checkLeaf(in);
-            System.out.println("Writing: " + letter);
+            //System.out.println("Writing: " + letter); //DEBUG
             out.write(letter);
         }
         out.close();
+        System.out.println("Wrote " + this.getWeight() + " characters to output."); //DEBUG
     }
 
     ///////////////////////////////////////

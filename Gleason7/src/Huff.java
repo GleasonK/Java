@@ -28,16 +28,13 @@ public class Huff {
     private void huffAway() throws IOException {
         this.makeTable();
         HuffTree tree = this.makeHTree();
-        //System.out.print("Code: ");                     //DEBUGs
-        makeBinary(tree); //Void function, updates the symbol table
-        st.toStringCodes();                             //DEBUG
-        //System.out.println("Tree: " + tree.toString()); //DEBUG
+        makeBinary(tree);   //Void function, updates the symbol table
+        st.toStringCodes();  //DEBUG codes to string
     }
 
     private void makeTable() throws IOException{
         FileReader inputFile = io.openInputFile(this.input);
         //System.out.println("FILE IN: "); //DEBUG
-
         int temp = 0; //Set temp so it can get in the while loop
         int freq;
         while (temp!= -1){
@@ -54,7 +51,6 @@ public class Huff {
             }
         }
         inputFile.close();
-
         //System.out.println();                //DEBUG
         //System.out.println(st.toString());   //DEBUG
     }
@@ -119,7 +115,7 @@ public class Huff {
 
     public static void main(String[] args) throws IOException {
         //Execute compression from Terminal with an argument
-        //new Huff(args[0]).huffAway();
-        new Huff("src/what1.txt").huffAway();
+        new Huff(args[0]).huffAway();
+        //new Huff("src/what1.txt").huffAway();
     }
 }
