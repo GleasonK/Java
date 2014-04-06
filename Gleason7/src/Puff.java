@@ -81,7 +81,7 @@ public class Puff {
 
 
     public static void main(String[] args) throws IOException, DataFormatException{
-        new Puff("what.zip").puffAway();
-        //new Puff(args[0]).puffAway();
+        //new Puff("what.zip").puffAway(); //for use in IntelliJ
+        new Puff(args[0]).puffAway();
     }
 }
