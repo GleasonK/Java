@@ -43,20 +43,22 @@ public class TouchPadHTML {
 
         //Add toolbar Buttons
         JButton
-                html = HTMLbarE.add(HTMLact),
-                body = HTMLbarE.add(bodyAct),
-                div  = HTMLbarE.add(divAct),
-                h1   = HTMLbarE.add(h1Act),
-                p    = HTMLbarE.add(pAct),
-                a    = HTMLbarE.add(aAct),
+                html  = HTMLbarE.add(HTMLact),
+                body  = HTMLbarE.add(bodyAct),
+                center= HTMLbarE.add(centerAct),
+                div   = HTMLbarE.add(divAct),
+                h1    = HTMLbarE.add(h1Act),
+                p     = HTMLbarE.add(pAct),
+                a     = HTMLbarE.add(aAct),
                 img = HTMLbarE.add(imgAct);
         HTMLbarE.addSeparator();
         JButton close = HTMLbarE.add(closeAct);
 
         //Configure Buttons
         html.setText(null);
-
         html.setIcon(new ImageIcon("HTMLi/html.gif"));
+        center.setText(null);
+        center.setIcon(new ImageIcon("HTMLi/center.gif"));
         body.setText(null);
         body.setIcon(new ImageIcon("HTMLi/body.gif"));
         div.setText(null);
@@ -82,6 +84,7 @@ public class TouchPadHTML {
         JButton
                 form = HTMLbarS.add(formAct),
                 input = HTMLbarS.add(inputAct),
+                ol = HTMLbarS.add(olAct),
                 ul = HTMLbarS.add(ulAct),
                 li = HTMLbarS.add(liAct),
                 b = HTMLbarS.add(bAct),
@@ -95,6 +98,8 @@ public class TouchPadHTML {
         form.setIcon(new ImageIcon("HTMLi/form.gif"));
         input.setText(null);
         input.setIcon(new ImageIcon("HTMLi/input.gif"));
+        ol.setText(null);
+        ol.setIcon(new ImageIcon("HTMLi/ol.gif"));
         ul.setText(null);
         ul.setIcon(new ImageIcon("HTMLi/ul.gif"));
         li.setText(null);
@@ -120,6 +125,7 @@ public class TouchPadHTML {
             //TE.area.setCaretPosition(TE.area.getSelectionEnd());
             HTMLact.setEnabled(false);
             tags.push("</html>");
+            tags.setPrevious("<html>");
             closeAct.setEnabled(true);
             TE.change();
 
@@ -131,6 +137,7 @@ public class TouchPadHTML {
         public void actionPerformed(ActionEvent e) {
             TE.area.append("<body>\n");
             tags.push("</body>");
+            tags.setPrevious("<body>");
             closeAct.setEnabled(true);
             bodyAct.setEnabled(false);
             TE.change();
@@ -138,11 +145,25 @@ public class TouchPadHTML {
         }
     };
 
+    Action centerAct = new AbstractAction("CENTER", new ImageIcon("HTMLi/center.gif")) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (tags.indent()) TE.area.append("<center>");
+            else TE.area.append(tags.getBuffer() + "<center>");
+            tags.push("</center>");
+            tags.setPrevious("<center>");
+            closeAct.setEnabled(true);
+            TE.change();
+        }
+    };
+
     Action divAct = new AbstractAction("DIV", new ImageIcon("HTMLi/div.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<div class = \"\">\n");
+            if (tags.indent()) TE.area.append("<div class = \"\">\n");
+            else TE.area.append(tags.getBuffer() + "<div class = \"\">\n");
             tags.push("</div>");
+            tags.setPrevious("<div>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -151,8 +172,10 @@ public class TouchPadHTML {
     Action h1Act = new AbstractAction("H1", new ImageIcon("HTMLi/h1.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<h1>");
+            if (tags.indent()) TE.area.append("<h1>");
+            else TE.area.append(tags.getBuffer() + "<h1>");
             tags.push("</h1>");
+            tags.setPrevious("<h1>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -161,8 +184,10 @@ public class TouchPadHTML {
     Action aAct = new AbstractAction("A", new ImageIcon("HTMLi/h1.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<a href = \"LINK\">");
+            if (tags.indent()) TE.area.append("<a href = \"LINK\">TEXT");
+            else TE.area.append(tags.getBuffer() + "<a href = \"LINK\">TEXT");
             tags.push("</a>");
+            tags.setPrevious("<a>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -171,8 +196,10 @@ public class TouchPadHTML {
     Action pAct = new AbstractAction("P", new ImageIcon("HTMLi/p.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (tags.indent()) TE.area.append("<p>");
             TE.area.append(tags.getBuffer() + "<p>");
             tags.push("</p>");
+            tags.setPrevious("<p>");
             closeAct.setEnabled(true);
             TE.change();
 
@@ -182,7 +209,9 @@ public class TouchPadHTML {
     Action imgAct = new AbstractAction("IMG", new ImageIcon("HTMLi/img.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<img src = \"SOURCE\"/>\n");
+            if (tags.indent()) TE.area.append("<img src = \"SOURCE\"/>\n");
+            else TE.area.append(tags.getBuffer() + "<img src = \"SOURCE\"/>\n");
+            tags.setPrevious("<img>");
             TE.change();
         }
     };
@@ -199,8 +228,10 @@ public class TouchPadHTML {
     Action formAct = new AbstractAction("FORM", new ImageIcon("HTMLi/form.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<form action = \"ACTION\">\n");
+            if (tags.indent()) TE.area.append("<form action = \"ACTION\">\n");
+            else TE.area.append(tags.getBuffer() + "<form action = \"ACTION\">\n");
             tags.push("</form>");
+            tags.setPrevious("<form>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -208,7 +239,21 @@ public class TouchPadHTML {
     Action inputAct = new AbstractAction("INPUT", new ImageIcon("HTMLi/input.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<input action = \"TYPE\" value = \"VALUE\" />\n");
+            if (tags.indent()) TE.area.append("<input action = \"TYPE\" value = \"VALUE\" />\n");
+            else TE.area.append(tags.getBuffer() + "<input action = \"TYPE\" value = \"VALUE\" />\n");
+            closeAct.setEnabled(true);
+            tags.setPrevious("<input>");
+            TE.change();
+        }
+    };
+
+    Action olAct = new AbstractAction("OL", new ImageIcon("HTMLi/ol.gif")) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (tags.indent()) TE.area.append(tags.getBuffer() + "<ol>\n");
+            else TE.area.append(tags.getBuffer() + "<ol>\n");
+            tags.push("</ol>");
+            tags.setPrevious("<ol>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -217,8 +262,10 @@ public class TouchPadHTML {
     Action ulAct = new AbstractAction("UL", new ImageIcon("HTMLi/ul.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<ul>\n");
+            if (tags.indent()) TE.area.append(tags.getBuffer() + "<ul>\n");
+            else TE.area.append(tags.getBuffer() + "<ul>\n");
             tags.push("</ul>");
+            tags.setPrevious("<ul>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -227,8 +274,10 @@ public class TouchPadHTML {
     Action liAct = new AbstractAction("LI", new ImageIcon("HTMLi/li.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<li>LIST_ELEMENT");
+            if (tags.indent()) TE.area.append("<li>LIST_ELEMENT");
+            else TE.area.append(tags.getBuffer() + "<li>LIST_ELEMENT");
             tags.push("</li>");
+            tags.setPrevious("<li>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -237,8 +286,10 @@ public class TouchPadHTML {
     Action bAct = new AbstractAction("B", new ImageIcon("HTMLi/b.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<b>TEXT");
+            if (tags.indent()) TE.area.append("<b>TEXT");
+            else TE.area.append(tags.getBuffer() + "<b>TEXT");
             tags.push("</b>");
+            tags.setPrevious("<b>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -247,8 +298,10 @@ public class TouchPadHTML {
     Action iAct = new AbstractAction("I", new ImageIcon("HTMLi/i.gif")) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TE.area.append(tags.getBuffer() + "<i>TEXT");
+            if (tags.indent()) TE.area.append("<i>TEXT");
+            else TE.area.append(tags.getBuffer() + "<i>TEXT");
             tags.push("</i>");
+            tags.setPrevious("<i>");
             closeAct.setEnabled(true);
             TE.change();
         }
@@ -258,6 +311,7 @@ public class TouchPadHTML {
         @Override
         public void actionPerformed(ActionEvent e) {
             TE.area.append(tags.getBuffer() + "<br/>\n");
+            tags.setPrevious("<br/>");
             closeAct.setEnabled(true);
             TE.change();
         }

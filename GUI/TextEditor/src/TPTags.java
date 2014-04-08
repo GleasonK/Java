@@ -7,9 +7,11 @@ public interface TPTags<T> {
     public String rip();
     public void push(T s);
     public boolean isEmpty();
+    public boolean indent();
     public int size();
     public int getIndent();
     public String getBuffer();
+    public void setPrevious(T tag);
     public String toString();
     //public void checkIndent();
 }

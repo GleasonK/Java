@@ -11,15 +11,20 @@ public class TPTagsC<T> implements TPTags<T>{
     //Instance Variables
     private Deque<T> tags;
     private int indent;
+    private Deque<T> previous;
 
     public TPTagsC(int indent){
         this.tags = new ArrayDeque<T>();
         this.indent = 0;
+        this.previous = new ArrayDeque<T>();
     }
 
     //Rip off next tag in line.
     public String rip(){
         if(!this.tags.isEmpty()) {
+
+            //Take off of previous list too
+            this.previous.pop();
             String tagIn = (String) this.tags.pop();
             String tagOut = tagIn;
             if (!this.checkNewLine(tagIn)) tagOut += "\n";
@@ -30,33 +35,53 @@ public class TPTagsC<T> implements TPTags<T>{
         else throw new NoSuchElementException("Tags List Empty");
     }
 
+    //Peek at next tag
+    private T peek(){
+        return this.previous.peek();
+    }
+
     // Returns true for elements that require indentation counter to increment
     private boolean checkIndent(String tag){
         if (tag.equals("</div>")  ||
             tag.equals("</form>") ||
-            tag.equals("</ul>"))
+            tag.equals("</ul>")   ||
+            tag.equals("</ol>"))
                 return true;
         return false;
     }
 
     // Returns true for elements that are not preceeded by an indent.
     private boolean noIndent(String tag) {
-        if (tag.equals("</p>")    ||
-            tag.equals("</li>")   ||
-            tag.equals("</h1>")   ||
-            tag.equals("</a>")    ||
-            tag.equals("</label>")||
-            tag.equals("</b>")    ||
-            tag.equals("</i>"))  //  ||
-                return true;
+        if (
+                tag.equals("</p>")     ||
+                tag.equals("</li>")    ||
+                tag.equals("</h1>")    ||
+                tag.equals("</a>")     ||
+                tag.equals("</center>")||
+                tag.equals("</label>") ||
+                tag.equals("</b>")     ||
+                tag.equals("</i>"))
+            return true;
+        else if (
+                tag.equals("<p>")     ||
+                tag.equals("<li>")    ||
+                tag.equals("<h1>")    ||
+                tag.equals("<a>")     ||
+                tag.equals("<center>")||
+                tag.equals("<label>") ||
+                tag.equals("<b>")     ||
+                tag.equals("<i>"))
+            return true;
         System.out.println("NoIndent - NOPE!" + tag);
         return false;
     }
 
     // Returns true for elements that are not followed by a new line
     private boolean checkNewLine(String tag){
-        if (tag.equals("</span>") ||
-            tag.equals("</i>")    ||
+        if (tag.equals("</span>")  ||  //NEED SPAN
+            tag.equals("</h1>")||
+            //tag.equals("</center>")||
+            tag.equals("</i>")     ||
             tag.equals("</b>"))
                 return true;
         return false;
@@ -70,6 +95,11 @@ public class TPTagsC<T> implements TPTags<T>{
 
     public boolean isEmpty(){
         return this.tags.isEmpty();
+    }
+
+    public boolean indent(){
+        if (this.previous.isEmpty()) return false;
+        return this.noIndent((String) this.previous.peek());
     }
 
     public int size() {
@@ -86,6 +116,10 @@ public class TPTagsC<T> implements TPTags<T>{
             buffer += "\t";
         }
         return buffer;
+    }
+
+    public void setPrevious(T tag){
+        this.previous.push(tag);
     }
 
     public String toString(){
