@@ -32,4 +32,9 @@
 			<li>Common HTML blocks with automatic indentation for building HTML skeleton of project.</li>
 			<li>Early phases, still has many bugs</li>
 		</ul>
+	<li>v0.2</li>
+		<ul>
+			<li>Added new tags: center, ol</li>
+			<li>Improved new line functionality</li>
+		</ul>
 </ul>
