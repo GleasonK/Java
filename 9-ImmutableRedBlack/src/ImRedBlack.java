@@ -12,7 +12,14 @@ public interface ImRedBlack<Key extends Comparable<Key>, Value> {
     public String toString();
 
     //Questioning
+    public ImRedBlack fix();
     public ImRedBlack getLeft();
     public ImRedBlack getRight();
+    public boolean getColor();
+
+    public void setLeft(ImRedBlack irb);
+    public void setRight(ImRedBlack irb);
+    public void setColor(boolean color);
+    public void setSize(int n);
     public boolean isRed();
 }
