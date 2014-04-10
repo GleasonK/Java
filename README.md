@@ -14,6 +14,11 @@
 		<ul>
 			<li>Polished off the Huff and Puff algorithms.</li>
 		</ul>
+	<li> 2.0 </li>
+		<ul>
+			<li>Completed Huff and Puff compression algorithms.</li>
+			<li>Began working on an immutable Red-Black Tree</li>
+		</ul>
 </ul>
 <h2>Application Projects</h2>
 <h3>Simple Text Editor</h3>
