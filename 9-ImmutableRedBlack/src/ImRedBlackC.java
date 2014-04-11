@@ -26,15 +26,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     public ImRedBlack<Key, Value> put(Key key, Value val){
         ImRedBlack tree = put(key,val, "");
-
-//        System.out.println(tree.getColor());
-
         tree.setColor(BLACK);
-
-//        System.out.println(tree.getColor());
-//        System.out.println("\nReturn Tree");
-//        tree.toString();
-
         return tree;
     }
 
@@ -60,82 +52,40 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public ImRedBlack<Key, Value> put(Key key, Value val, String s){
         int comp = this.key.compareTo(key);
         if (comp == 0) {
-            //LOOK AT COLOR
             return new ImRedBlackC<Key, Value>(key, val, this.color, this.left, this.right);
-
         }
         else if (comp < 0) {
             ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left, this.right.put(key, val,""));
-            //NOT CALLED UNTIL RECURSE DONE, Need to make something recurse up the tree.
             i = i.fix();
-
-//            System.out.println("\nI.FIX()");
-//            i.toString();
-
             return i;
-
-            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val).fix());
         }
         else {
             ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left.put(key, val,""), this.right);
             i = i.fix();
-
-//            System.out.println("\nI.FIX()");
-//            i.toString();
-
             return i;
-            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val,""), this.right).fix();
-
         }
     }
-
 
     //Need to write rotate functions that return ImRedBlack
     public ImRedBlack fix(){
-        //ImRedBlack i = this;
-        if (this.getRight().isRed() && !this.getLeft().isRed()) {
-            return this.rotateLeft().fix();
-        }
-
-
+        if (this.getRight().isRed() && !this.getLeft().isRed()) { return this.rotateLeft().fix(); }
         if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight().fix();
         if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors().fix();
-        else {System.out.println("\nRETURN ELSE CALLED ");return this;}
+        else return this;
     }
 
     private ImRedBlack rotateLeft(){
-        System.out.println("\nROTATE LEFT CALLED"); //Debug
-        System.out.println("this:"); //Debug
-
-//        this.toString();  //DEBUG
-//        System.out.println();
-
         ImRedBlack<Key, Value> rt = this.getRight();
         this.setRight(rt.getLeft());
-
-//        System.out.println("this after setRight:"); //Debug
-//        this.toString(); //DEBUG
-
         rt.setLeft(this);
-
-
-//        System.out.println("\nRT rotate Left"); //Debug
-//        rt.toString(); //DEBUG
-//        System.out.println("\ndone:"); //Debug
-
         rt.setColor(this.getColor());
         this.setColor(RED);
         rt.setSize(this.N);
         this.N = this.left.size() + this.right.size() + 1;
-
-//        System.out.println("\nRT Returned:"); //Debug
-//        rt.toString(); //DEBUG
-
         return rt;
     }
 
     private ImRedBlack rotateRight(){
-        System.out.println("\n ROTATE RIGHT CALLED");
         ImRedBlack<Key, Value> lt = this.getLeft();
         this.setLeft(lt.getRight());
         lt.setRight(this);
@@ -148,7 +98,6 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     }
 
     private ImRedBlack flipColors(){
-        System.out.println("\nFLIP COLORS CALLED");
         this.color = !this.color;
         this.getLeft().setColor(!this.getLeft().getColor());
         this.getRight().setColor(!this.getRight().getColor());
@@ -164,15 +113,12 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     }
 
     public String toString(){
-
-        System.out.print("(" + this.key + ":" + this.val + ":" + this.showColor());
-        System.out.print(" L");
+        System.out.print(" " + this.key + ":" + this.val + ":" + this.showColor());
+        System.out.print(" <--(Lt");
             this.getLeft().toString();
-        //System.out.print("" + this.key + ":" + this.showColor()); //+ ":" + this.val + ":" + this.showColor());
-        System.out.print(" R");
+        System.out.print(" Rt");
             this.getRight().toString();
         System.out.print(")");
-        //System.out.println();
         return "";
     }
 
@@ -200,24 +146,23 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public void setSize(int n){ this.N = n; }
 
     public static void main (String[] args){
-        ImRedBlack<String, Integer> irb = new emptyC<String, Integer>();
-        irb = irb.put("F", 1);
-        irb.toString();System.out.println();
-        irb = irb.put("L",2);
-        irb.toString();System.out.println(" 2 ");
-        irb = irb.put("O",3);
-        irb.toString();System.out.println(" O ");
-        irb = irb.put("R",3);
-        irb.toString();System.out.println(" R ");
+        ImRedBlack<String, String> irb = new emptyC<String, String>();
+        irb = irb.put("F", "Florida");
+        System.out.println(irb.toString());
+        irb = irb.put("L", "fLorida");
+        System.out.println(irb.toString());
+        irb = irb.put("O", "flOrida");
+        irb = irb.put("R", "floRida");
+        System.out.println(irb.toString());
         System.out.println(irb.toStringLine());
-        irb = irb.put("I",3);
-        irb.toString();System.out.println();
-        irb = irb.put("D",3);
-        irb.toString();System.out.println();
-        irb = irb.put("A",3);
-        irb.toString();System.out.println();
-        irb = irb.put("A",3);
-        irb.toString();System.out.println();
+        irb = irb.put("I", "florIda");
+        System.out.println(irb.toString());
+        irb = irb.put("D", "floriDa");
+        System.out.println(irb.toString());
+        irb = irb.put("A", "floridA");
+        System.out.println(irb.toString());
+        irb = irb.put("A", "floridA2");
+        System.out.println(irb.toString());
         System.out.println(irb.toStringLine());
     }
 
