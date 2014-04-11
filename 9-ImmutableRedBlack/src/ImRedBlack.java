@@ -1,7 +1,7 @@
-//File: RedBlack.java
-//
-//
-//
+//File: ImRedBlack.java
+//Author: Kevin Gleason
+//Date: 4/11/14
+//Use: Interface for the ImRedBlackC and EmptyC Classes
 
 public interface ImRedBlack<Key extends Comparable<Key>, Value> {
     public boolean isEmpty();
@@ -11,20 +11,22 @@ public interface ImRedBlack<Key extends Comparable<Key>, Value> {
     public ImRedBlack<Key, Value> put(Key key, Value val);
     public String toString();
 
-    //Questioning
+    //Fix and Getters
     public ImRedBlack fix();
     public ImRedBlack getLeft();
     public ImRedBlack getRight();
     public boolean getColor();
 
+    //Setters
     public void setLeft(ImRedBlack irb);
     public void setRight(ImRedBlack irb);
     public void setColor(boolean color);
     public void setSize(int n);
     public boolean isRed();
 
-    public String toStringLine();
+    //Additional toString
+    public String toStringStructure();
 
-
+    //Pseudo put
     public ImRedBlack<Key, Value> put(Key key, Value val, String s);
 }

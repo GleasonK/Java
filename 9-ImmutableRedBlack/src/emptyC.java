@@ -1,12 +1,10 @@
 //File:
 
-public class emptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Key, Value> {
+public class EmptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Key, Value> {
 
     private static final boolean RED = true;
     private static final boolean BLACK = false;
     private boolean color = BLACK;
-
-
 
     public boolean isEmpty() { return true; }
 
@@ -17,34 +15,29 @@ public class emptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
     public Value get(Key key) { return null; }
 
     public ImRedBlack<Key, Value> put(Key key, Value val, String s) {
-        return new ImRedBlackC(key, val, RED, new emptyC<Key, Value>(), new emptyC<Key, Value>());
+        return new ImRedBlackC(key, val, RED, new EmptyC<Key, Value>(), new EmptyC<Key, Value>());
     }
 
     public ImRedBlack<Key, Value> put(Key key, Value val) {
-        //System.out.println("NEW EMPTY");  //DEBUG
-        return new ImRedBlackC(key, val, RED, new emptyC<Key, Value>(), new emptyC<Key, Value>());
+        return new ImRedBlackC(key, val, RED, new EmptyC<Key, Value>(), new EmptyC<Key, Value>());
     }
 
-    public String toString() { System.out.print(" -- ");
-        return "";
-    }
+    public String toString() { return " -- ";}
 
-
-    //Needed or even true?
     public boolean isRed(){return false;}
 
-    //Need these?
-    public emptyC getRight(){return this;}
-    public emptyC getLeft(){return this;}
-    public boolean getColor() { return BLACK; }
+    //Getter Functions
+    public EmptyC getRight(){return this;}
+    public EmptyC getLeft(){return this;}
+    public boolean getColor() { return this.color; }
 
     //Set the private information
-    public void setLeft(ImRedBlack irb){}
+    public void setLeft(ImRedBlack irb) {}
     public void setRight(ImRedBlack irb){}
     public void setColor(boolean color) {}
     public void setSize(int n){}
 
     //FIX?
     public ImRedBlack fix(){return this;}
-    public String toStringLine() {return " -- ";}
+    public String toStringStructure() { System.out.print(" -- "); return "";}
 }
