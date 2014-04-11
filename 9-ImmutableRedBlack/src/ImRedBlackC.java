@@ -24,6 +24,20 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         this.N = this.left.size() + this.right.size() + 1;
     }
 
+    public ImRedBlack put(Key key, Value val){
+        ImRedBlack tree = put(key,val, "");
+
+//        System.out.println(tree.getColor());
+
+        tree.setColor(BLACK);
+
+//        System.out.println(tree.getColor());
+//        System.out.println("\nReturn Tree");
+//        tree.toString();
+
+        return tree;
+    }
+
     public boolean isEmpty(){
         return false;
     }
@@ -36,13 +50,6 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this.get(key) != null;
     }
 
-//    public Value get(Node node, Key key){
-//        int comp = node.key.compareTo(key);
-//        if (comp < 0) return get(node.getRight(), key);
-//        if (comp > 0) return get(node.getLeft(), key);
-//        return node.val;
-//    }
-
     public Value get(Key key){
         int comp = this.key.compareTo(key);
         if (comp < 0) return this.right.get(key);
@@ -50,56 +57,89 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this.val;
     }
 
-    public ImRedBlack<Key, Value> put(Key key, Value val){
-        //CHECK FOR FIX
-        //Find the node to attach
+    public ImRedBlack<Key, Value> put(Key key, Value val, String s){
         int comp = this.key.compareTo(key);
         if (comp == 0) {
-            ////////////////Red the right color?
-            //return new ImRedBlackC<Key, Value>(key, val, RED,this.left, this.right).fix();
-            ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(key, val, RED, this.left, this.right).fix();
-            return new ImRedBlackC<Key, Value>(key, val, RED, this.left, this.right).fix();
+            //LOOK AT COLOR
+            return new ImRedBlackC<Key, Value>(key, val, this.color, this.left, this.right);
 
-            //System.out.println("COMP == 0"); //DEBUG
-            
         }
         else if (comp < 0) {
-            return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val).fix());
-            //ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val));
-            //t.fix();
-            //System.out.println("COMP < 0, move right"); //DEBUG
-            //return t;
-            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val));
+            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val,""));
+            //NOT CALLED UNTIL RECURSE DONE, Need to make something recurse up the tree.
+            i = i.fix();
+
+//            System.out.println("\nI.FIX()");
+//            i.toString();
+
+            return i;
+
+            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val).fix());
         }
         else {
-            ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val), this.right);
-            t.fix();
-            //System.out.println("COMP > 0 move left"); //DEBUG
-            return t;
+            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val,""), this.right);
+            i = i.fix();
+
+//            System.out.println("\nI.FIX()");
+//            i.toString();
+
+            return i;
+            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val,""), this.right).fix();
+
         }
     }
 
 
     //Need to write rotate functions that return ImRedBlack
     public ImRedBlack fix(){
-        if (this.getRight().isRed() && !this.getLeft().isRed())  return this.rotateLeft();
+        if (this.getRight().isRed() && !this.getLeft().isRed()) {
+
+            ImRedBlack i = this.rotateLeft();
+
+//            System.out.println("\nFixResult: ");
+//            i.toString();
+
+            return i;
+        }
+
+
         if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight();
         if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors();
-        else return this;
+        else {System.out.println("\nRETURN ELSE CALLED ");return this;}
     }
 
     private ImRedBlack rotateLeft(){
+        System.out.println("\nROTATE LEFT CALLED"); //Debug
+//        System.out.println("this:"); //Debug
+
+        //this.toString();  //DEBUG
+
         ImRedBlack rt = this.getRight();
         this.setRight(rt.getLeft());
+
+//        System.out.println("this after setRight:"); //Debug
+//        this.toString(); //DEBUG
+
         rt.setLeft(this);
+
+
+//        System.out.println("\nRT rotate Left"); //Debug
+//        rt.toString(); //DEBUG
+//        System.out.println("\ndone:"); //Debug
+
         rt.setColor(this.getColor());
         this.setColor(RED);
         rt.setSize(this.N);
         this.N = this.left.size() + this.right.size() + 1;
+
+//        System.out.println("\nRT Returned:"); //Debug
+//        rt.toString(); //DEBUG
+
         return rt;
     }
 
     private ImRedBlack rotateRight(){
+        System.out.println("\n ROTATE RIGHT CALLED");
         ImRedBlack lt = this.getLeft();
         this.setLeft(lt.getRight());
         lt.setRight(this);
@@ -112,10 +152,15 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     }
 
     private ImRedBlack flipColors(){
+        System.out.println("\nFLIP COLORS CALLED");
         this.color = !this.color;
         this.getLeft().setColor(!this.getLeft().getColor());
         this.getRight().setColor(!this.getRight().getColor());
         return this;
+    }
+
+    private void makeBlack(){
+        this.setColor(BLACK);
     }
 
     public boolean isRed(){
@@ -123,13 +168,20 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     }
 
     public String toString(){
-        //System.out.println("Printing tree");
+
         System.out.print("(" + this.key + ":" + this.val + ":" + this.showColor());
-        System.out.print(" L"); this.getLeft().toString();
-        System.out.print(" R");this.getRight().toString();
+        System.out.print(" L");
+            this.getLeft().toString();
+        //System.out.print("" + this.key + ":" + this.showColor()); //+ ":" + this.val + ":" + this.showColor());
+        System.out.print(" R");
+            this.getRight().toString();
         System.out.print(")");
         //System.out.println();
         return "";
+    }
+
+    public String toStringLine(){
+        return this.getLeft().toStringLine() + this.key + ":" + this.val + ":" + this.showColor() + this.getRight().toStringLine();
     }
 
     //Get the private information
@@ -154,21 +206,22 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public static void main (String[] args){
         ImRedBlack<String, Integer> irb = new emptyC<String, Integer>();
         irb = irb.put("F", 1);
-        irb.toString();System.out.println();
+        //irb.toString();System.out.println();
         irb = irb.put("L",2);
-        irb.toString();System.out.println();
+        irb.toString();System.out.println(" 2 ");
         irb = irb.put("O",3);
-        irb.toString();System.out.println();
+        irb.toString();System.out.println(" O ");
         irb = irb.put("R",3);
-        irb.toString();System.out.println();
+        irb.toString();System.out.println(" R ");
         irb = irb.put("I",3);
         irb.toString();System.out.println();
         irb = irb.put("D",3);
         irb.toString();System.out.println();
         irb = irb.put("A",3);
-        irb.toString();System.out.println();
-//        irb = irb.put("A",3);
 //        irb.toString();System.out.println();
+//        irb = irb.put("A",3);
+        irb.toString();System.out.println();
+        System.out.println(irb.toStringLine());
     }
 
 }

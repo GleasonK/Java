@@ -22,4 +22,9 @@ public interface ImRedBlack<Key extends Comparable<Key>, Value> {
     public void setColor(boolean color);
     public void setSize(int n);
     public boolean isRed();
+
+    public String toStringLine();
+
+
+    public ImRedBlack<Key, Value> put(Key key, Value val, String s);
 }

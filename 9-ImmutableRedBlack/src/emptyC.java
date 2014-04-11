@@ -16,7 +16,12 @@ public class emptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
 
     public Value get(Key key) { return null; }
 
+    public ImRedBlack<Key, Value> put(Key key, Value val, String s) {
+        return new ImRedBlackC(key, val, RED, new emptyC<Key, Value>(), new emptyC<Key, Value>());
+    }
+
     public ImRedBlack<Key, Value> put(Key key, Value val) {
+        //System.out.println("NEW EMPTY");  //DEBUG
         return new ImRedBlackC(key, val, RED, new emptyC<Key, Value>(), new emptyC<Key, Value>());
     }
 
@@ -38,5 +43,8 @@ public class emptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
     public void setRight(ImRedBlack irb){}
     public void setColor(boolean color) {}
     public void setSize(int n){}
+
+    //FIX?
     public ImRedBlack fix(){return this;}
+    public String toStringLine() {return "--";}
 }
