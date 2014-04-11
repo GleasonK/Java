@@ -46,5 +46,5 @@ public class emptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
 
     //FIX?
     public ImRedBlack fix(){return this;}
-    public String toStringLine() {return "--";}
+    public String toStringLine() {return " -- ";}
 }

@@ -65,7 +65,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
         }
         else if (comp < 0) {
-            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val,""));
+            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left, this.right.put(key, val,""));
             //NOT CALLED UNTIL RECURSE DONE, Need to make something recurse up the tree.
             i = i.fix();
 
@@ -77,7 +77,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
             //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val).fix());
         }
         else {
-            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val,""), this.right);
+            ImRedBlack i = new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left.put(key, val,""), this.right);
             i = i.fix();
 
 //            System.out.println("\nI.FIX()");
@@ -92,14 +92,10 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     //Need to write rotate functions that return ImRedBlack
     public ImRedBlack fix(){
+        ImRedBlack i;
         if (this.getRight().isRed() && !this.getLeft().isRed()) {
+            i = this.rotateLeft();
 
-            ImRedBlack i = this.rotateLeft();
-
-//            System.out.println("\nFixResult: ");
-//            i.toString();
-
-            return i;
         }
 
 
@@ -110,9 +106,10 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     private ImRedBlack rotateLeft(){
         System.out.println("\nROTATE LEFT CALLED"); //Debug
-//        System.out.println("this:"); //Debug
+        System.out.println("this:"); //Debug
 
-        //this.toString();  //DEBUG
+//        this.toString();  //DEBUG
+//        System.out.println();
 
         ImRedBlack rt = this.getRight();
         this.setRight(rt.getLeft());
@@ -206,20 +203,21 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public static void main (String[] args){
         ImRedBlack<String, Integer> irb = new emptyC<String, Integer>();
         irb = irb.put("F", 1);
-        //irb.toString();System.out.println();
+        irb.toString();System.out.println();
         irb = irb.put("L",2);
         irb.toString();System.out.println(" 2 ");
         irb = irb.put("O",3);
         irb.toString();System.out.println(" O ");
         irb = irb.put("R",3);
         irb.toString();System.out.println(" R ");
+        System.out.println(irb.toStringLine());
         irb = irb.put("I",3);
         irb.toString();System.out.println();
         irb = irb.put("D",3);
         irb.toString();System.out.println();
         irb = irb.put("A",3);
-//        irb.toString();System.out.println();
-//        irb = irb.put("A",3);
+        irb.toString();System.out.println();
+        irb = irb.put("A",3);
         irb.toString();System.out.println();
         System.out.println(irb.toStringLine());
     }
