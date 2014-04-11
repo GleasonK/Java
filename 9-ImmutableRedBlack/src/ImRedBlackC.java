@@ -24,7 +24,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         this.N = this.left.size() + this.right.size() + 1;
     }
 
-    public ImRedBlack put(Key key, Value val){
+    public ImRedBlack<Key, Value> put(Key key, Value val){
         ImRedBlack tree = put(key,val, "");
 
 //        System.out.println(tree.getColor());
@@ -92,15 +92,14 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     //Need to write rotate functions that return ImRedBlack
     public ImRedBlack fix(){
-        ImRedBlack i;
+        //ImRedBlack i = this;
         if (this.getRight().isRed() && !this.getLeft().isRed()) {
-            i = this.rotateLeft();
-
+            return this.rotateLeft().fix();
         }
 
 
-        if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight();
-        if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors();
+        if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight().fix();
+        if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors().fix();
         else {System.out.println("\nRETURN ELSE CALLED ");return this;}
     }
 
@@ -111,7 +110,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 //        this.toString();  //DEBUG
 //        System.out.println();
 
-        ImRedBlack rt = this.getRight();
+        ImRedBlack<Key, Value> rt = this.getRight();
         this.setRight(rt.getLeft());
 
 //        System.out.println("this after setRight:"); //Debug
@@ -137,7 +136,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     private ImRedBlack rotateRight(){
         System.out.println("\n ROTATE RIGHT CALLED");
-        ImRedBlack lt = this.getLeft();
+        ImRedBlack<Key, Value> lt = this.getLeft();
         this.setLeft(lt.getRight());
         lt.setRight(this);
         lt.setColor(this.getColor());
