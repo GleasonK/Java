@@ -19,6 +19,11 @@
 			<li>Completed Huff and Puff compression algorithms.</li>
 			<li>Began working on an immutable Red-Black Tree</li>
 		</ul>
+	<li> 2.1 </li>
+		<ul>
+			<li>Completed the Immutable Red-Black tree.</li>
+			<li>Code still to be tidied up a little.</li>
+		</ul>
 </ul>
 <h2>Application Projects</h2>
 <h3>Simple Text Editor</h3>
