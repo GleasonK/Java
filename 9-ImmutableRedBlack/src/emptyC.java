@@ -1,4 +1,9 @@
-//File:
+//File: EmptyC.java
+//Author: Kevin Gleason
+//Date: April 10, 2014
+//Use: The empty class implementation of the ImRedBlack interface
+
+import java.util.NoSuchElementException;
 
 public class EmptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Key, Value> {
 
@@ -14,6 +19,8 @@ public class EmptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
 
     public Value get(Key key) { return null; }
 
+    //public Value get(Key key) { throw new NoSuchElementException("Key not in tree."); }
+
     public ImRedBlack<Key, Value> put(Key key, Value val, String s) {
         return new ImRedBlackC(key, val, RED, new EmptyC<Key, Value>(), new EmptyC<Key, Value>());
     }
@@ -22,7 +29,7 @@ public class EmptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
         return new ImRedBlackC(key, val, RED, new EmptyC<Key, Value>(), new EmptyC<Key, Value>());
     }
 
-    public String toString() { return " -- ";}
+    public String toString() { return "";}
 
     public boolean isRed(){return false;}
 
@@ -37,7 +44,6 @@ public class EmptyC<Key extends Comparable<Key>, Value> implements ImRedBlack<Ke
     public void setColor(boolean color) {}
     public void setSize(int n){}
 
-    //FIX?
     public ImRedBlack fix(){return this;}
-    public String toStringStructure() { System.out.print(" -- "); return "";}
+    public String toStringStructure() { System.out.print("--"); return "";}
 }

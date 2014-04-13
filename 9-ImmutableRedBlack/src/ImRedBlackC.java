@@ -46,6 +46,8 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this.get(key) != null;
     }
 
+    //Recursively search through tree
+    //If it finds a key match it returns the value. If it does not it uses the EmptyC get function to return null
     public Value get(Key key){
         int comp = this.key.compareTo(key);
         if (comp < 0) return this.right.get(key);
@@ -55,6 +57,8 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     //Pseudo put function so that the tree can be changed to black prior to returning to user.
     //Created new trees each call to properly mutate and return the correct type.
+    //Function recursively puts each level of the tree in and then recursively calls the fix function
+    //In case of conflict, it overrides the key with a new value. Ok since Value is not used to compare.
     public ImRedBlack<Key, Value> put(Key key, Value val, String s){
         int comp = this.key.compareTo(key);
         if (comp == 0)
@@ -69,9 +73,10 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public ImRedBlack fix(){
         if (this.getRight().isRed() && !this.getLeft().isRed()) { return this.rotateLeft().fix(); }
         if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight().fix();
-        if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors().fix();
+        if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors();
         else return this;
     }
+
     //Rotate the Tree left in case of Right-Leaning red link.
     private ImRedBlack rotateLeft(){
         ImRedBlack<Key, Value> rt = this.getRight();
@@ -83,6 +88,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         this.N = this.left.size() + this.right.size() + 1;
         return rt;
     }
+
     //Rotate the Tree right in case of double Left-Leaning links.
     private ImRedBlack rotateRight(){
         ImRedBlack<Key, Value> lt = this.getLeft();
@@ -93,8 +99,8 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         lt.setSize(this.N);
         this.N = this.getLeft().size() + this.getRight().size() + 1;
         return lt;
-
     }
+
     //Flip the RED and BLACK in case of both sides being a RED link.
     private ImRedBlack flipColors(){
         this.color = !this.color;
@@ -103,22 +109,25 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this;
     }
 
+    //Helper function for fix, used to check if a left or right child is red
     public boolean isRed(){
         return this.color == RED;
     }
 
+    //Helper toString function to show the structure of the tree as key:value:color with arrows pointing up to root
     public String toStringStructure(){
-        System.out.print(" " + this.key + ":" + this.val + ":" + this.showColor());
-        System.out.print(" <--(Lt");
+        System.out.print(this.key + ":" + this.val + ":" + this.showColor());
+        System.out.print(" <--(Lt ");
             this.getLeft().toStringStructure();
-        System.out.print(" Rt");
+        System.out.print(" Rt ");
             this.getRight().toStringStructure();
         System.out.print(")");
         return "";
     }
 
+    //toString function to show the elements in order from left to right (least to greatest) with key:val:color
     public String toString(){
-        return this.getLeft().toString() + this.key + ":" + this.val + ":" + this.showColor() + this.getRight().toString();
+        return this.getLeft().toString() + this.key + ":" + this.val + ":" + this.showColor() + " " + this.getRight().toString();
     }
 
     //Get the private information
@@ -140,47 +149,29 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
 
     public static void main (String[] args){
         ImRedBlack<String, Integer> irb = new EmptyC<String, Integer>();
-        irb = irb.put("D", 1);
-        System.out.println(irb.toString());
-        irb = irb.put("E", 2);
-        System.out.println(irb.toStringStructure());
-        irb = irb.put("B", 4);
-        irb = irb.put("C", 0);
-        irb = irb.put("D", 10);
-        System.out.println(irb.get("B"));
-        System.out.println(irb.get("D"));
+        System.out.println("Put 'F', Put 'L'");
+        irb = irb.put("F", 5);
+        irb = irb.put("L", 4);
+        System.out.println("Size of tree is: " + irb.size());
         System.out.println(irb.toString());
         System.out.println(irb.toStringStructure());
-//        irb = irb.put("I", "florIda");
-//        System.out.println(irb.toString());
-//        irb = irb.put("D", "floriDa");
-//        System.out.println(irb.toString());
-//        irb = irb.put("A", "floridA");
-//        System.out.println(irb.toString());
-//        irb = irb.put("A", "floridA2");
-//        System.out.println(irb.toString());
-//        System.out.println(irb.toStringStructure());
 
+        irb = irb.put("O", 14);
+        irb = irb.put("R", 600);
+        irb = irb.put("I", 2);
+        irb = irb.put("D", 90);
+        irb = irb.put("A", 45);
+        irb = irb.put("A", 8);
+        System.out.println("\nPut 'O', Put 'R', Put 'I', Put 'D', Put 'A => 45', Put 'A => 8'");
+        System.out.println("Immutable RedBlack isEmpty: " + irb.isEmpty());
+        System.out.println("Size of tree is: " + irb.size());
+        System.out.println("Contains F: " + irb.contains("F"));
+        System.out.println("Contains Q: " + irb.contains("Q"));
+        System.out.println("Get F: " + irb.get("F"));
+        System.out.println("Get A: " + irb.get("A"));
+        System.out.println(irb.toString());
+        System.out.println(irb.toStringStructure());
 
-
-//        ImRedBlack<String, String> irb = new EmptyC<String, String>();
-//        irb = irb.put("F", "Florida");
-//        System.out.println(irb.toString());
-//        irb = irb.put("L", "fLorida");
-//        System.out.println(irb.toString());
-//        irb = irb.put("O", "flOrida");
-//        irb = irb.put("R", "floRida");
-//        System.out.println(irb.toString());
-//        System.out.println(irb.toStringStructure());
-//        irb = irb.put("I", "florIda");
-//        System.out.println(irb.toString());
-//        irb = irb.put("D", "floriDa");
-//        System.out.println(irb.toString());
-//        irb = irb.put("A", "floridA");
-//        System.out.println(irb.toString());
-//        irb = irb.put("A", "floridA2");
-//        System.out.println(irb.toString());
-//        System.out.println(irb.toStringStructure());
     }
 
 }
