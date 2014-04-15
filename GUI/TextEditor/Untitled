@@ -1,19 +1,34 @@
-HELLOOOO 
-dfgdfg
-df
-g
-dfg
-dfgdgdfgdfgdfdgdfg
-
-
-dfgdfgdf
-dfg
-fg
-f
-gg
-fgfg
-fgfgfgdg
-dsgsdfg
-sdfg
-sdfgsdfgsdfg
-Kevin Gleason
+<html>
+<head><title>TITLE</title></head>
+<body>
+<center><div class = "">
+	<p><b>TEXT</b></p>
+	<a href = "LINK">TEXT</a>
+	<img src = "SOURCE"/>
+	<img src = "SOURCE"/>
+</div>
+</center>
+<h1><i>TEXT</i></h1><p></p>
+<div class = "">
+	<div class = "">
+		<img src = "SOURCE"/>
+	</div>
+	<div class = "">
+		<img src = "SOURCE"/>
+	</div>
+</div>
+<form action = "ACTION">
+	<input action = "TYPE" value = "VALUE" />
+	<input action = "TYPE" value = "VALUE" />
+	<input action = "TYPE" value = "VALUE" />
+	<input action = "TYPE" value = "VALUE" />
+</form>
+<ul>
+	<li>LIST_ELEMENT<i>TEXT</i></li>
+	<li>LIST_ELEMENT<b>TEXT</b></li>
+	<li>LIST_ELEMENT<img src = "SOURCE"/>
+</li>
+</ul>
+</body>
+</html>
+<br/>
