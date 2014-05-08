@@ -1,0 +1,124 @@
+package ui;
+
+import util.*;
+import controller.*;
+import players.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.geom.*;
+import java.util.*;
+
+public class MatchControlPanel extends JPanel implements ControlPanel {
+    
+    private Controller controller;
+    private DBG dbg;
+
+    private JPanel buttonPanel;
+    private JPanel scorePanel;
+
+    private JTextField 
+        team1SQCount, team1GameCount, 
+        team2SQCount, team2GameCount;
+    private JProgressBar 
+        team1Progress, team2Progress;
+    
+    public MatchControlPanel(Controller controller) {
+        Player
+            player1 = controller.getPlayer(1),
+            player2 = controller.getPlayer(2);
+
+        this.controller = controller;
+        this.dbg = new DBG(DBG.UI, "GControlPanel");
+
+        this.team1SQCount = new JTextField("0", 10);
+        this.team2SQCount = new JTextField("0", 10);
+
+        this.team1GameCount = new JTextField("0", 10);
+        this.team2GameCount = new JTextField("0", 10);
+
+        this.buttonPanel = new JPanel();
+        this.scorePanel = new JPanel();
+        this.scorePanel.setLayout(new BorderLayout());
+        
+        team1Progress = new JProgressBar(0, (int) controller.getTimeout()); 
+        team2Progress = new JProgressBar(0, (int) controller.getTimeout());
+
+        String 
+            p1Name = player1.teamName(),
+            p2Name = player2.teamName();
+        
+        JPanel sp1 = makePlayerPanel(p1Name, team1SQCount, team1GameCount, team1Progress);
+        JPanel sp2 = makePlayerPanel(p2Name, team2SQCount, team2GameCount, team2Progress);
+        this.scorePanel.add(sp1, BorderLayout.WEST);
+        this.scorePanel.add(sp2, BorderLayout.EAST);        
+    }
+
+    public JPanel makePlayerPanel(String playerName, JTextField fc, JTextField gc,
+    JProgressBar p1pb) {
+        JPanel outer = new JPanel();
+        
+        outer.setLayout(new GridLayout(3,1));
+        
+        outer.add(new JLabel(playerName, JLabel.CENTER));
+        
+//        JPanel pe1 = makePlayerPanelEntry("Squares",fc);
+  //      JPanel pe2 = makePlayerPanelEntry("Games",gc);
+        
+    //    JPanel inner = new JPanel();
+      //  inner.setLayout(new GridLayout(1,2));
+        
+        //inner.add(pe1);
+        //inner.add(pe2);
+        
+        //outer.add(inner);
+        outer.add(fc);
+        outer.add(gc);
+        
+        return outer;
+    }
+    
+    public JPanel makePlayerPanelEntry(String fieldName, JTextField tf) {
+        JPanel jp = new JPanel();
+        
+        jp.setLayout(new GridLayout(2,1));
+        
+        JLabel l = new JLabel(fieldName + "abc");
+        
+        jp.add(l);
+        jp.add(tf);
+        
+        return jp;
+    }
+
+    public void setButtonPanel(JPanel buttonPanel) {
+        this.buttonPanel = buttonPanel;
+    }
+    public void setScorePanel(JPanel scorePanel) {
+        this.scorePanel = scorePanel;
+    }
+
+    public void setGameScore(Score score) {
+        Integer p1 = new Integer(score.getPlayer1());
+        Integer p2 = new Integer(score.getPlayer2());
+        
+        team1SQCount.setText(p1.toString());
+        team2SQCount.setText(p2.toString());
+    }
+    
+    public void setMatchScore(Score score) {
+        Integer p1 = new Integer(score.getPlayer1());
+        Integer p2 = new Integer(score.getPlayer2());
+        
+        team1GameCount.setText(p1.toString());
+        team2GameCount.setText(p2.toString());
+    }
+    public void setProgress(Clock clock) {
+        Player player = clock.getPlayer();
+        JProgressBar pb = player.getId() == 1 ? team1Progress : team2Progress;
+        long newValue = clock.elapsedTime();
+        pb.setValue((int) newValue);
+    } 
+}

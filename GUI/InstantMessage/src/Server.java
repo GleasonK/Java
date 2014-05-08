@@ -94,7 +94,6 @@ public class Server extends JFrame{
         showMessage("Waiting for user to connect...\n");
         this.connection = this.server.accept();
         showMessage("Connected to " + this.connection.getInetAddress().getHostName());
-
     }
 
     //Make Streams to send and return data
