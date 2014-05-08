@@ -73,7 +73,6 @@ public class Huff {
             tempQueue.add(new HuffTreeC((char) 0, tempWeight, p1, p2));
         }
         return tempQueue.poll();
-
     }
 
     private void makeBinary(HuffTree tree) throws IOException {
@@ -91,9 +90,7 @@ public class Huff {
             outFile.write(freqW);
             //System.out.print("Char: " + c + "Freq: " + freqW);  //DEBUG
         }
-
         inputFile.close();
-
 
         FileReader fin = io.openInputFile(this.input);
         //System.out.println("FILE IN: "); //DEBUG

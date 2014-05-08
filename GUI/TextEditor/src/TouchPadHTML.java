@@ -312,7 +312,6 @@ public class TouchPadHTML {
         public void actionPerformed(ActionEvent e) {
             TE.area.append(tags.getBuffer() + "<br/>\n");
             tags.setPrevious("<br/>");
-            closeAct.setEnabled(true);
             TE.change();
         }
     };

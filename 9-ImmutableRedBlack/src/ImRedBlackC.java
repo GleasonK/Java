@@ -8,6 +8,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     private static final boolean RED = true;
     private static final boolean BLACK = false;
 
+    //Instance Variables
     private boolean color;
     private int N;
     private Key key;
@@ -15,6 +16,7 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     private ImRedBlack<Key, Value> left;
     private ImRedBlack<Key, Value> right;
 
+    //Constructor, Set all the instance variables
     public ImRedBlackC(Key key, Value val, boolean color, ImRedBlack left, ImRedBlack right) {
         this.val = val;
         this.key = key;
@@ -24,6 +26,14 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         this.N = this.left.size() + this.right.size() + 1;
     }
 
+    //Handler function for put to set the root as black after returning.
+    public ImRedBlack<Key, Value> put(Key key, Value val){
+        ImRedBlack tree = put(key,val, "");
+        tree.setColor(BLACK);
+        return tree;
+    }
+
+    //Will not be empty, since only EmptyC will return empty
     public boolean isEmpty(){
         return false;
     }
@@ -36,13 +46,8 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this.get(key) != null;
     }
 
-//    public Value get(Node node, Key key){
-//        int comp = node.key.compareTo(key);
-//        if (comp < 0) return get(node.getRight(), key);
-//        if (comp > 0) return get(node.getLeft(), key);
-//        return node.val;
-//    }
-
+    //Recursively search through tree
+    //If it finds a key match it returns the value. If it does not it uses the EmptyC get function to return null
     public Value get(Key key){
         int comp = this.key.compareTo(key);
         if (comp < 0) return this.right.get(key);
@@ -50,46 +55,31 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this.val;
     }
 
-    public ImRedBlack<Key, Value> put(Key key, Value val){
-        //CHECK FOR FIX
-        //Find the node to attach
+    //Pseudo put function so that the tree can be changed to black prior to returning to user.
+    //Created new trees each call to properly mutate and return the correct type.
+    //Function recursively puts each level of the tree in and then recursively calls the fix function
+    //In case of conflict, it overrides the key with a new value. Ok since Value is not used to compare.
+    public ImRedBlack<Key, Value> put(Key key, Value val, String s){
         int comp = this.key.compareTo(key);
-        if (comp == 0) {
-            ////////////////Red the right color?
-            //return new ImRedBlackC<Key, Value>(key, val, RED,this.left, this.right).fix();
-            ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(key, val, RED, this.left, this.right).fix();
-            return new ImRedBlackC<Key, Value>(key, val, RED, this.left, this.right).fix();
-
-            //System.out.println("COMP == 0"); //DEBUG
-            
-        }
-        else if (comp < 0) {
-            return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val).fix());
-            //ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val));
-            //t.fix();
-            //System.out.println("COMP < 0, move right"); //DEBUG
-            //return t;
-            //return new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left, this.right.put(key, val));
-        }
-        else {
-            ImRedBlack<Key, Value> t = new ImRedBlackC<Key, Value>(this.key, this.val, RED, this.left.put(key, val), this.right);
-            t.fix();
-            //System.out.println("COMP > 0 move left"); //DEBUG
-            return t;
-        }
+        if (comp == 0)
+            return new ImRedBlackC<Key, Value>(key, val, this.color, this.left, this.right);
+        else if (comp < 0)
+            return new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left, this.right.put(key, val,"")).fix();
+        else
+            return new ImRedBlackC<Key, Value>(this.key, this.val, this.color, this.left.put(key, val,""), this.right).fix();
     }
 
-
-    //Need to write rotate functions that return ImRedBlack
+    //Fix all the issues with the RB Tree. Called recursively to fix all three.
     public ImRedBlack fix(){
-        if (this.getRight().isRed() && !this.getLeft().isRed())  return this.rotateLeft();
-        if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight();
+        if (this.getRight().isRed() && !this.getLeft().isRed()) { return this.rotateLeft().fix(); }
+        if (this.getLeft().isRed()  &&  this.getLeft().getLeft().isRed())  return this.rotateRight().fix();
         if (this.getLeft().isRed()  &&  this.right.isRed())  return this.flipColors();
         else return this;
     }
 
+    //Rotate the Tree left in case of Right-Leaning red link.
     private ImRedBlack rotateLeft(){
-        ImRedBlack rt = this.getRight();
+        ImRedBlack<Key, Value> rt = this.getRight();
         this.setRight(rt.getLeft());
         rt.setLeft(this);
         rt.setColor(this.getColor());
@@ -99,8 +89,9 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return rt;
     }
 
+    //Rotate the Tree right in case of double Left-Leaning links.
     private ImRedBlack rotateRight(){
-        ImRedBlack lt = this.getLeft();
+        ImRedBlack<Key, Value> lt = this.getLeft();
         this.setLeft(lt.getRight());
         lt.setRight(this);
         lt.setColor(this.getColor());
@@ -108,9 +99,9 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         lt.setSize(this.N);
         this.N = this.getLeft().size() + this.getRight().size() + 1;
         return lt;
-
     }
 
+    //Flip the RED and BLACK in case of both sides being a RED link.
     private ImRedBlack flipColors(){
         this.color = !this.color;
         this.getLeft().setColor(!this.getLeft().getColor());
@@ -118,28 +109,33 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
         return this;
     }
 
+    //Helper function for fix, used to check if a left or right child is red
     public boolean isRed(){
         return this.color == RED;
     }
 
-    public String toString(){
-        //System.out.println("Printing tree");
-        System.out.print("(" + this.key + ":" + this.val + ":" + this.showColor());
-        System.out.print(" L"); this.getLeft().toString();
-        System.out.print(" R");this.getRight().toString();
+    //Helper toString function to show the structure of the tree as key:value:color with arrows pointing up to root
+    public String toStringStructure(){
+        System.out.print(this.key + ":" + this.val + ":" + this.showColor());
+        System.out.print(" <--(Lt ");
+            this.getLeft().toStringStructure();
+        System.out.print(" Rt ");
+            this.getRight().toStringStructure();
         System.out.print(")");
-        //System.out.println();
         return "";
     }
 
-    //Get the private information
-    public ImRedBlack getLeft(){return this.left;}
-    public ImRedBlack getRight(){return this.right;}
-
-    public boolean getColor() {
-            return this.color;
+    //toString function to show the elements in order from left to right (least to greatest) with key:val:color
+    public String toString(){
+        return this.getLeft().toString() + this.key + ":" + this.val + ":" + this.showColor() + " " + this.getRight().toString();
     }
 
+    //Get the private information
+    public ImRedBlack getLeft(){ return this.left; }
+    public ImRedBlack getRight(){ return this.right; }
+    public boolean getColor() { return this.color; }
+
+    //Helper function for toString()
     private String showColor(){
         if (getColor()) return "red";
         else return "black";
@@ -152,23 +148,30 @@ public class ImRedBlackC<Key extends Comparable<Key>, Value> implements ImRedBla
     public void setSize(int n){ this.N = n; }
 
     public static void main (String[] args){
-        ImRedBlack<String, Integer> irb = new emptyC<String, Integer>();
-        irb = irb.put("F", 1);
-        irb.toString();System.out.println();
-        irb = irb.put("L",2);
-        irb.toString();System.out.println();
-        irb = irb.put("O",3);
-        irb.toString();System.out.println();
-        irb = irb.put("R",3);
-        irb.toString();System.out.println();
-        irb = irb.put("I",3);
-        irb.toString();System.out.println();
-        irb = irb.put("D",3);
-        irb.toString();System.out.println();
-        irb = irb.put("A",3);
-        irb.toString();System.out.println();
-//        irb = irb.put("A",3);
-//        irb.toString();System.out.println();
+        ImRedBlack<String, Integer> irb = new EmptyC<String, Integer>();
+        System.out.println("Put 'F', Put 'L'");
+        irb = irb.put("F", 5);
+        irb = irb.put("L", 4);
+        System.out.println("Size of tree is: " + irb.size());
+        System.out.println(irb.toString());
+        System.out.println(irb.toStringStructure());
+
+        irb = irb.put("O", 14);
+        irb = irb.put("R", 600);
+        irb = irb.put("I", 2);
+        irb = irb.put("D", 90);
+        irb = irb.put("A", 45);
+        irb = irb.put("A", 8);
+        System.out.println("\nPut 'O', Put 'R', Put 'I', Put 'D', Put 'A => 45', Put 'A => 8'");
+        System.out.println("Immutable RedBlack isEmpty: " + irb.isEmpty());
+        System.out.println("Size of tree is: " + irb.size());
+        System.out.println("Contains F: " + irb.contains("F"));
+        System.out.println("Contains Q: " + irb.contains("Q"));
+        System.out.println("Get F: " + irb.get("F"));
+        System.out.println("Get A: " + irb.get("A"));
+        System.out.println(irb.toString());
+        System.out.println(irb.toStringStructure());
+
     }
 
 }
